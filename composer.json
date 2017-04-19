@@ -1,0 +1,21 @@
+{
+    "name": "macklus/yii2-geotypeahead",
+    "description": "Simple and fast typeahead selector to define country, province and location. Includes full database of countries, provinces and locations",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","ajax","typeahead","select","country","province","location"],
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "José Pedro Andrés García",
+            "email": "macklus@debianitas.net"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "macklus\\geotypeahead\\": ""
+        }
+    }
+}
