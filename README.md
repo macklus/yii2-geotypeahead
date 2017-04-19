@@ -29,3 +29,6 @@ Once the extension is installed, simply use it in your code by  :
 
 ```php
 <?= \macklus\geotypeahead\AutoloadExample::widget(); ?>```
+=======
+# yii2-geotypeahead
+TypeAhead search for country, province and location
