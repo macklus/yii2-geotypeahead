@@ -2,7 +2,7 @@
     "name": "macklus/yii2-geotypeahead",
     "description": "Simple and fast typeahead selector to define country, province and location. Includes full database of countries, provinces and locations",
     "type": "yii2-extension",
-    "keywords": ["yii2","extension","ajax","typeahead","select","country","province","location"],
+    "keywords": ["yii2", "extension", "ajax", "typeahead", "select", "country", "province", "location"],
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -11,11 +11,15 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "~2.0.0"
+        "yiisoft/yii2": "~2.0.0",
+        "kartik-v/yii2-widget-typeahead": "*"
     },
     "autoload": {
         "psr-4": {
             "macklus\\geotypeahead\\": ""
         }
+    },
+    "extra": {
+        "bootstrap": "macklus\\geotypeahead\\Bootstrap"
     }
 }
