@@ -14,7 +14,6 @@ use yii\base\Model;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use macklus\geoselect\models\GeoCountry;
 
 /**
  * InputWidget is the base class for widgets that collect user inputs.
@@ -88,7 +87,8 @@ class GeoTypeAhead extends Widget {
     }
 
     public function run() {
-        return Html::dropDownList($this->attribute, null, ArrayHelper::map(GeoCountry::getDropDown(), 'id', 'name'));
+        //return Html::dropDownList($this->attribute, null, ArrayHelper::map(GeoCountry::getDropDown(), 'id', 'name'));
+        return 'ok';
     }
 
     /**
