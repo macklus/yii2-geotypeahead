@@ -2,6 +2,7 @@
 
 namespace macklus\geotypeahead;
 
+use Yii;
 use yii\base\BootstrapInterface;
 
 class Bootstrap implements BootstrapInterface {
@@ -21,7 +22,6 @@ class Bootstrap implements BootstrapInterface {
             $rule = Yii::createObject($configUrlRule);
 
             $app->urlManager->addRules([$rule], false);
-            
         }
     }
 
