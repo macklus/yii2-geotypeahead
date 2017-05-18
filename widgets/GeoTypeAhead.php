@@ -80,14 +80,16 @@ class GeoTypeAhead extends Widget {
         parent::run();
 
         $pieces = explode('\\', $this->model::className());
-        $formName = strtolower(array_pop($pieces));
+        $formName = array_pop($pieces);
+	$formNameLow = strtolower($formName);
+	$widgetName = $formName. '[' . $this->attribute . ']';
 
-        $countrySelector = "#$formName-$this->attribute_country";
-        $provinceSelector = "#$formName-$this->attribute_province";
-        $locationSelector = "#$formName-$this->attribute_location";
+        $countrySelector = "#$formNameLow-$this->attribute_country";
+        $provinceSelector = "#$formNameLow-$this->attribute_province";
+        $locationSelector = "#$formNameLow-$this->attribute_location";
 
         $html = Typeahead::widget([
-                    'name' => $this->attribute,
+                    'name' => $widgetName,
                     'options' => [
                         'placeholder' => $this->placeholder
                     ],
