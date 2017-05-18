@@ -90,6 +90,7 @@ class GeoTypeAhead extends Widget {
 
         $html = Typeahead::widget([
                     'name' => $widgetName,
+		    'value' => $this->model->{$this->attribute},
                     'options' => [
                         'placeholder' => $this->placeholder
                     ],
