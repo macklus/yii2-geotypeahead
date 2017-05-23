@@ -81,8 +81,8 @@ class GeoTypeAhead extends Widget {
 
         $pieces = explode('\\', $this->model::className());
         $formName = array_pop($pieces);
-	$formNameLow = strtolower($formName);
-	$widgetName = $formName. '[' . $this->attribute . ']';
+        $formNameLow = strtolower($formName);
+        $widgetName = $formName . '[' . $this->attribute . ']';
 
         $countrySelector = "#$formNameLow-$this->attribute_country";
         $provinceSelector = "#$formNameLow-$this->attribute_province";
@@ -90,7 +90,7 @@ class GeoTypeAhead extends Widget {
 
         $html = Typeahead::widget([
                     'name' => $widgetName,
-		    'value' => $this->model->{$this->attribute},
+                    'value' => $this->model->{$this->attribute},
                     'options' => [
                         'placeholder' => $this->placeholder
                     ],
@@ -112,6 +112,9 @@ class GeoTypeAhead extends Widget {
                         . "$('$countrySelector').val(data.country_id);"
                         . "$('$provinceSelector').val(data.province_id);"
                         . "$('$locationSelector').val(data.location_id);"
+                        . "$('$countrySelector').val(data.country_id).trigger('change');"
+                        . "$('$provinceSelector').val(data.province_id).trigger('change');"
+                        . "$('$locationSelector').val(data.location_id).trigger('change');"
                         . "}",
                     ]
         ]);
