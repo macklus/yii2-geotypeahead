@@ -53,6 +53,7 @@ class GeoTypeAhead extends Widget {
     public $attribute_province;
     public $attribute_location;
     public $placeholder;
+    public $extraOptions;
 
     /**
      * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
@@ -88,12 +89,15 @@ class GeoTypeAhead extends Widget {
         $provinceSelector = "#$formNameLow-$this->attribute_province";
         $locationSelector = "#$formNameLow-$this->attribute_location";
 
+        $options = ['placeholder' => $this->placeholder];
+        if (isSet($this->extraOptions)) {
+            $options = array_merge($options, $this->extraOptions);
+        }
+
         $html = Typeahead::widget([
                     'name' => $widgetName,
                     'value' => $this->model->{$this->attribute},
-                    'options' => [
-                        'placeholder' => $this->placeholder
-                    ],
+                    'options' => $options,
                     'pluginOptions' => ['highlight' => true],
                     'dataset' => [
                         [
