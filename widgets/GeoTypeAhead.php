@@ -54,6 +54,7 @@ class GeoTypeAhead extends Widget {
     public $attribute_location;
     public $placeholder;
     public $extraOptions;
+    public $fieldOptions;
 
     /**
      * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
@@ -94,7 +95,7 @@ class GeoTypeAhead extends Widget {
             $options = array_merge($options, $this->extraOptions);
         }
 
-        $html = $this->form->field($this->model, $this->attribute)->widget(Typeahead::classname(), [
+        $html = $this->form->field($this->model, $this->attribute, (array) $this->fieldOptions)->widget(Typeahead::classname(), [
             'name' => $widgetName,
             'value' => $this->model->{$this->attribute},
             'options' => $options,
