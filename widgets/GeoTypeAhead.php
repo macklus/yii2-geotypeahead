@@ -94,34 +94,35 @@ class GeoTypeAhead extends Widget {
             $options = array_merge($options, $this->extraOptions);
         }
 
-        $html = Typeahead::widget([
-                    'name' => $widgetName,
-                    'value' => $this->model->{$this->attribute},
-                    'options' => $options,
-                    'pluginOptions' => ['highlight' => true],
-                    'dataset' => [
-                        [
-                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                            'display' => 'value',
-                            'prefetch' => '/geotypeahead/prefetch',
-                            'limit' => 50,
-                            'remote' => [
-                                'url' => Url::to(['geotypeahead/search']) . '?q=%QUERY',
-                                'wildcard' => '%QUERY',
-                            ]
-                        ]
-                    ],
-                    'pluginEvents' => [
-                        "typeahead:select" => "function(event, data) {"
-                        . "$('$countrySelector').val(data.country_id);"
-                        . "$('$provinceSelector').val(data.province_id);"
-                        . "$('$locationSelector').val(data.location_id);"
-                        . "$('$countrySelector').val(data.country_id).trigger('change');"
-                        . "$('$provinceSelector').val(data.province_id).trigger('change');"
-                        . "$('$locationSelector').val(data.location_id).trigger('change');"
-                        . "}",
+        $html = $this->form->field($this->model, $this->attribute)->widget(Typeahead::classname(), [
+            'name' => $widgetName,
+            'value' => $this->model->{$this->attribute},
+            'options' => $options,
+            'pluginOptions' => ['highlight' => true],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                    'display' => 'value',
+                    'prefetch' => '/geotypeahead/prefetch',
+                    'limit' => 50,
+                    'remote' => [
+                        'url' => Url::to(['geotypeahead/search']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY',
                     ]
+                ]
+            ],
+            'pluginEvents' => [
+                "typeahead:select" => "function(event, data) {"
+                . "$('$countrySelector').val(data.country_id);"
+                . "$('$provinceSelector').val(data.province_id);"
+                . "$('$locationSelector').val(data.location_id);"
+                . "$('$countrySelector').val(data.country_id).trigger('change');"
+                . "$('$provinceSelector').val(data.province_id).trigger('change');"
+                . "$('$locationSelector').val(data.location_id).trigger('change');"
+                . "}",
+            ]
         ]);
+
         $html .= $this->form->field($this->model, $this->attribute_country, ['template' => '{input}'])->hiddenInput()->label(false);
         $html .= $this->form->field($this->model, $this->attribute_province, ['template' => '{input}'])->hiddenInput()->label(false);
         $html .= $this->form->field($this->model, $this->attribute_location, ['template' => '{input}'])->hiddenInput()->label(false);
