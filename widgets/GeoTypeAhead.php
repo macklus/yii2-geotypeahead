@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @link
+ * @copyright
+ * @license
  */
 
 namespace macklus\geotypeahead\widgets;
@@ -11,30 +11,20 @@ namespace macklus\geotypeahead\widgets;
 use Yii;
 use yii\base\Widget;
 use yii\base\Model;
-use yii\base\InvalidConfigException;
-use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
+use kartik\widgets\Typeahead;
+use yii\helpers\Url;
 
 /**
- * InputWidget is the base class for widgets that collect user inputs.
  *
- * An input widget can be associated with a data model and an attribute,
- * or a name and a value. If the former, the name and the value will
- * be generated automatically.
- *
- * Classes extending from this widget can be used in an [[\yii\widgets\ActiveForm|ActiveForm]]
- * using the [[\yii\widgets\ActiveField::widget()|widget()]] method, for example like this:
- *
- * ```php
- * <?= $form->field($model, 'from_date')->widget('WidgetClassName', [
- *     // configure additional widget properties here
- * ]) ?>
- * ```
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * @author
+ * @since
  */
 class GeoTypeAhead extends Widget {
+
+    /**
+     * 
+     */
+    public $form;
 
     /**
      * @var Model the data model that this widget is associated with.
@@ -47,9 +37,41 @@ class GeoTypeAhead extends Widget {
     public $attribute;
 
     /**
+     * @var string the model attribute where we store country_id.
+     */
+    public $attribute_country;
+
+    /**
+     * @var string the model attribute where we store province_id.
+     */
+    public $attribute_province;
+
+    /**
+     * @var string the model attribute where we store location_id.
+     */
+    public $attribute_location;
+
+    /**
+     * @var string the placeholder who appears on search input
+     */
+    public $placeholder;
+
+    /**
+     * @var array options to add on typeahead
+     */
+    public $extraOptions;
+
+    /**
+     * @var array options to add on form element
+     */
+    public $fieldOptions;
+
+
+    /**
      * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
+
 
     /**
      * @var string the input value.
@@ -61,41 +83,61 @@ class GeoTypeAhead extends Widget {
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $options = [];
-
-    /**
-     * Initializes the widget.
-     * If you override this method, make sure you call the parent implementation first.
-     */
-//    public function init()
-//    {
-//        if ($this->name === null && !$this->hasModel()) {
-//            throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");
-//        }
-//        if (!isset($this->options['id'])) {
-//            $this->options['id'] = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->getId();
-//        }
-//        parent::init();
-//    }
-//
-//    public function run()
-//    {
-//        return 'tetas';
-//    }
+    private $_view;
 
     public function init() {
-        parent::init();
+        $this->_view = $this->getView();
+        return parent::init();
     }
 
     public function run() {
-        //return Html::dropDownList($this->attribute, null, ArrayHelper::map(GeoCountry::getDropDown(), 'id', 'name'));
-        return 'ok';
-    }
+        parent::run();
 
-    /**
-     * @return boolean whether this widget is associated with a data model.
-     */
-    protected function hasModel() {
-        return $this->model instanceof Model && $this->attribute !== null;
+        $pieces = explode('\\', $this->model::className());
+        $formName = array_pop($pieces);
+        $formNameLow = strtolower($formName);
+        $widgetName = $formName . '[' . $this->attribute . ']';
+
+        $countrySelector = "#$formNameLow-$this->attribute_country";
+        $provinceSelector = "#$formNameLow-$this->attribute_province";
+        $locationSelector = "#$formNameLow-$this->attribute_location";
+
+        $options = ['placeholder' => $this->placeholder];
+        if (isSet($this->extraOptions)) {
+            $options = array_merge($options, $this->extraOptions);
+        }
+
+        $html = $this->form->field($this->model, $this->attribute, (array) $this->fieldOptions)->widget(Typeahead::classname(), [
+            'name' => $widgetName,
+            'value' => $this->model->{$this->attribute},
+            'options' => $options,
+            'pluginOptions' => ['highlight' => true],
+            'dataset' => [
+                [
+                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                    'display' => 'value',
+                    'prefetch' => '/geotypeahead/prefetch',
+                    'limit' => 50,
+                    'remote' => [
+                        'url' => Url::to(['geotypeahead/search']) . '?q=%QUERY',
+                        'wildcard' => '%QUERY',
+                    ]
+                ]
+            ],
+            'pluginEvents' => [
+                "typeahead:select" => "function(event, data) {"
+                . "$('$countrySelector').val(data.country_id).trigger('change');"
+                . "$('$provinceSelector').val(data.province_id).trigger('change');"
+                . "$('$locationSelector').val(data.location_id).trigger('change');"
+                . "}",
+            ]
+        ]);
+
+        $html .= $this->form->field($this->model, $this->attribute_country, ['template' => '{input}'])->hiddenInput()->label(false);
+        $html .= $this->form->field($this->model, $this->attribute_province, ['template' => '{input}'])->hiddenInput()->label(false);
+        $html .= $this->form->field($this->model, $this->attribute_location, ['template' => '{input}'])->hiddenInput()->label(false);
+
+        return $html;
     }
 
 }

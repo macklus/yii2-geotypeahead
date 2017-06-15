@@ -21,5 +21,9 @@
     },
     "extra": {
         "bootstrap": "macklus\\geotypeahead\\Bootstrap"
+    },
+    "require": {
+        "yiisoft/yii2": "~2.0.5",
+        "kartik-v/yii2-widget-typeahead": "*"
     }
 }
