@@ -135,34 +135,36 @@ class GeoTypeAheadPostalCode extends Widget {
         }
 
         $this->_view->registerJs("
-            var myGtapc = '$formNameLow-$this->attribute';
-            $('#' + myGtapc).blur(function(e) {
-                var value = $('#' + myGtapc).val();
+            $('#$formNameLow-$this->attribute').blur(function(e) {
+                var value = $('#$formNameLow-$this->attribute').val();
+                // Beware empty postal code
+                if(value == '' ) {
+                    return;
+                }
                 var request = $.ajax({
                     url: '/geotypeahead/searchpostalcode',
                     method: 'GET',
                     data: { q: value },
                 }).done(function( data ) {
-                    if(data.country_id) {
-                        $('$countrySelector').val(data.country_id);
+                    // Beware empty or uncomplete data (i.e. you enter invalid postal code)
+                    if(!data.locality || !data.province || !data.country || !data.locality_id || !data.province_id || !data.country_id) {
+                        return false;
                     }
-                    if(data.province_id) {
-                        $('$provinceSelector').val(data.province_id);
-                    }
-                    if(data.locality_id) {
-                        $('$locationSelector').val(data.locality_id);
-                    }
+                    $('$countrySelector').val(data.country_id);
+                    $('$provinceSelector').val(data.province_id);
+                    $('$locationSelector').val(data.locality_id);
                     if($('$descriptionSelector').length) {
                         var message = data.locality + ' (' + data.province + ',' + data.country + ')';
                         if($('$descriptionSelector').typeahead != undefined) {
                             $('$descriptionSelector').typeahead('val', message);
+                        } else {
+                            $('$descriptionSelector').val(message);
                         }
                     }
                 }).fail(function( jqXHR, textStatus ) {
                     console.log('fail: ' + textStatus );
                 });;
             });");
-
         return $html;
     }
 

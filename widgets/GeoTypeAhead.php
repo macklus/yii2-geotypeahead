@@ -35,12 +35,6 @@ class GeoTypeAhead extends Widget {
      * @var string the model attribute that this widget is associated with.
      */
     public $attribute;
-    public $attribute_country;
-    public $attribute_province;
-    public $attribute_location;
-    public $placeholder;
-    public $extraOptions;
-    public $fieldOptions;
 
     /**
      * @var string the model attribute where we store country_id.
