@@ -4,10 +4,7 @@ namespace macklus\geotypeahead\controllers;
 
 use Yii;
 use yii\web\Controller;
-<<<<<<< HEAD
-=======
 use macklus\geotypeahead\traits\DataTrait;
->>>>>>> release/0.1
 
 /**
  * FichasController implements the CRUD actions for Fichas model.

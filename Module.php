@@ -35,10 +35,7 @@ class Module extends BaseModule {
     public $urlRules = [
         'prefetch' => 'geotypeahead/prefetch',
         'search' => 'geotypeahead/search',
-<<<<<<< HEAD
-=======
         'searchpostalcode' => 'geotypeahead/searchpostalcode',
->>>>>>> release/0.1
     ];
 
 }
