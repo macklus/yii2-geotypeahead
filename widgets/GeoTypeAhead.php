@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @link
+ * @copyright
+ * @license
  */
 
 namespace macklus\geotypeahead\widgets;
@@ -15,23 +15,9 @@ use kartik\widgets\Typeahead;
 use yii\helpers\Url;
 
 /**
- * InputWidget is the base class for widgets that collect user inputs.
  *
- * An input widget can be associated with a data model and an attribute,
- * or a name and a value. If the former, the name and the value will
- * be generated automatically.
- *
- * Classes extending from this widget can be used in an [[\yii\widgets\ActiveForm|ActiveForm]]
- * using the [[\yii\widgets\ActiveField::widget()|widget()]] method, for example like this:
- *
- * ```php
- * <?= $form->field($model, 'from_date')->widget('WidgetClassName', [
- *     // configure additional widget properties here
- * ]) ?>
- * ```
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * @author
+ * @since
  */
 class GeoTypeAhead extends Widget {
 
@@ -57,9 +43,41 @@ class GeoTypeAhead extends Widget {
     public $fieldOptions;
 
     /**
+     * @var string the model attribute where we store country_id.
+     */
+    public $attribute_country;
+
+    /**
+     * @var string the model attribute where we store province_id.
+     */
+    public $attribute_province;
+
+    /**
+     * @var string the model attribute where we store location_id.
+     */
+    public $attribute_location;
+
+    /**
+     * @var string the placeholder who appears on search input
+     */
+    public $placeholder;
+
+    /**
+     * @var array options to add on typeahead
+     */
+    public $extraOptions;
+
+    /**
+     * @var array options to add on form element
+     */
+    public $fieldOptions;
+
+
+    /**
      * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
+
 
     /**
      * @var string the input value.
@@ -114,9 +132,6 @@ class GeoTypeAhead extends Widget {
             ],
             'pluginEvents' => [
                 "typeahead:select" => "function(event, data) {"
-                . "$('$countrySelector').val(data.country_id);"
-                . "$('$provinceSelector').val(data.province_id);"
-                . "$('$locationSelector').val(data.location_id);"
                 . "$('$countrySelector').val(data.country_id).trigger('change');"
                 . "$('$provinceSelector').val(data.province_id).trigger('change');"
                 . "$('$locationSelector').val(data.location_id).trigger('change');"
