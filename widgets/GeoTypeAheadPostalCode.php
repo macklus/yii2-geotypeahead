@@ -1,25 +1,20 @@
 <?php
-
 /**
  * @link 
  * @copyright 
  * @license 
  */
-
 namespace macklus\geotypeahead\widgets;
 
-use Yii;
 use yii\base\Widget;
 use yii\base\Model;
-use yii\web\View;
-use kartik\widgets\Typeahead;
-use yii\helpers\Url;
 
 /**
  *
  * @author 
  */
-class GeoTypeAheadPostalCode extends Widget {
+class GeoTypeAheadPostalCode extends Widget
+{
 
     /**
      * 
@@ -81,17 +76,20 @@ class GeoTypeAheadPostalCode extends Widget {
      */
     public $fieldOptions;
 
-
     /**
      * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
 
-
     /**
      * @var string the input value.
      */
     public $value;
+
+    /**
+     * @var array the allowed countries to search
+     */
+    public $onlyCountries = [];
 
     /**
      * @var array the HTML attributes for the input tag.
@@ -100,12 +98,14 @@ class GeoTypeAheadPostalCode extends Widget {
     public $options = [];
     private $_view;
 
-    public function init() {
+    public function init()
+    {
         $this->_view = $this->getView();
         return parent::init();
     }
 
-    public function run() {
+    public function run()
+    {
         parent::run();
 
         $pieces = explode('\\', $this->model::className());
@@ -125,14 +125,16 @@ class GeoTypeAheadPostalCode extends Widget {
 
         $html = $this->form->field($this->model, $this->attribute, (array) $this->fieldOptions)->textInput();
 
-        if($this->generate_hidden_elements) {
+        if ($this->generate_hidden_elements) {
             $html .= $this->form->field($this->model, $this->attribute_country, ['template' => '{input}'])->hiddenInput()->label(false);
             $html .= $this->form->field($this->model, $this->attribute_province, ['template' => '{input}'])->hiddenInput()->label(false);
             $html .= $this->form->field($this->model, $this->attribute_location, ['template' => '{input}'])->hiddenInput()->label(false);
         }
-        if($this->generate_description_element) {
+        if ($this->generate_description_element) {
             $html .= $this->form->field($this->model, $this->attribute_description, ['template' => '{input}'])->testInput()->label(false);
         }
+
+        $onlyCountries = (count($this->onlyCountries) > 0 ? join(',', $this->onlyCountries) : '_');
 
         $this->_view->registerJs("
             $('#$formNameLow-$this->attribute').blur(function(e) {
@@ -167,5 +169,4 @@ class GeoTypeAheadPostalCode extends Widget {
             });");
         return $html;
     }
-
 }

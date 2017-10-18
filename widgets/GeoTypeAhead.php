@@ -1,11 +1,9 @@
 <?php
-
 /**
  * @link
  * @copyright
  * @license
  */
-
 namespace macklus\geotypeahead\widgets;
 
 use Yii;
@@ -19,7 +17,8 @@ use yii\helpers\Url;
  * @author
  * @since
  */
-class GeoTypeAhead extends Widget {
+class GeoTypeAhead extends Widget
+{
 
     /**
      * 
@@ -66,17 +65,20 @@ class GeoTypeAhead extends Widget {
      */
     public $fieldOptions;
 
-
     /**
      * @var string the input name. This must be set if [[model]] and [[attribute]] are not set.
      */
     public $name;
 
-
     /**
      * @var string the input value.
      */
     public $value;
+
+    /**
+     * @var array the allowed countries to search
+     */
+    public $onlyCountries = ['ES', 'FR', 'UK', 'AD', 'PT'];
 
     /**
      * @var array the HTML attributes for the input tag.
@@ -85,12 +87,14 @@ class GeoTypeAhead extends Widget {
     public $options = [];
     private $_view;
 
-    public function init() {
+    public function init()
+    {
         $this->_view = $this->getView();
         return parent::init();
     }
 
-    public function run() {
+    public function run()
+    {
         parent::run();
 
         $pieces = explode('\\', $this->model::className());
@@ -107,6 +111,8 @@ class GeoTypeAhead extends Widget {
             $options = array_merge($options, $this->extraOptions);
         }
 
+        $onlyCountries = (count($this->onlyCountries) > 0 ? join(',', $this->onlyCountries) : '_');
+
         $html = $this->form->field($this->model, $this->attribute, (array) $this->fieldOptions)->widget(Typeahead::classname(), [
             'name' => $widgetName,
             'value' => $this->model->{$this->attribute},
@@ -119,7 +125,7 @@ class GeoTypeAhead extends Widget {
                     'prefetch' => '/geotypeahead/prefetch',
                     'limit' => 50,
                     'remote' => [
-                        'url' => Url::to(['geotypeahead/search']) . '?q=%QUERY',
+                        'url' => Url::to(['geotypeahead/search']) . '?q=%QUERY&oc=' . $onlyCountries,
                         'wildcard' => '%QUERY',
                     ]
                 ]
@@ -139,5 +145,4 @@ class GeoTypeAhead extends Widget {
 
         return $html;
     }
-
 }
