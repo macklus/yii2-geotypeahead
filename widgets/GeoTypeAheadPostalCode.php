@@ -123,7 +123,7 @@ class GeoTypeAheadPostalCode extends Widget
             $options = array_merge($options, $this->extraOptions);
         }
 
-        $html = $this->form->field($this->model, $this->attribute, (array) $this->fieldOptions)->textInput();
+        $html = $this->form->field($this->model, $this->attribute, (array) $this->fieldOptions)->textInput($options);
 
         if ($this->generate_hidden_elements) {
             $html .= $this->form->field($this->model, $this->attribute_country, ['template' => '{input}'])->hiddenInput()->label(false);
@@ -131,7 +131,7 @@ class GeoTypeAheadPostalCode extends Widget
             $html .= $this->form->field($this->model, $this->attribute_location, ['template' => '{input}'])->hiddenInput()->label(false);
         }
         if ($this->generate_description_element) {
-            $html .= $this->form->field($this->model, $this->attribute_description, ['template' => '{input}'])->testInput()->label(false);
+            $html .= $this->form->field($this->model, $this->attribute_description, ['template' => '{input}'])->textInput()->label(false);
         }
 
         $onlyCountries = (count($this->onlyCountries) > 0 ? join(',', $this->onlyCountries) : '_');
